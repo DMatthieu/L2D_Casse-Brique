@@ -22,9 +22,12 @@ function love.load()
         ball.x = pad.x + (pad.width / 2)
         ball.y = pad.y - (ball.width / 2)
         ball.stick = true
+        ball.vx = 2
+        ball.vy = -2
 
     mousePos = {}
         mousePos.x, mousePos.y = 0    
+
 
 end
 
@@ -36,12 +39,13 @@ function love.update(dt)
     --update paddle position on X-Axis
     pad.x = mousePos.x
 
-    --Position of the Ball on screen
-    if ball.stick  then
+    --Behavior of ball if STICKY or NOT
+    if ball.stick == true  then
         ball.x = pad.x + (pad.width / 2)
         ball.y = pad.y - (ball.width / 2)
-    else
-    
+    elseif ball.stick == false then
+        ball.x = ball.x + ball.vx
+        ball.y = ball.y + ball.vy
     end
 
 end
@@ -57,8 +61,19 @@ function love.draw()
 
     PrintDebug()
 
+   
+
 end
 
+--Callback checking if mouse is clicked
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 and ball.stick == true then
+        ball.stick = false
+        --WARNING: This callback can call whatever love function
+        --but if you tru to call a love.graphics function
+        --it will do nothing because out of DRAW FUNCTION ! :)
+    end
+end
 
 
 
