@@ -34,6 +34,8 @@ function love.load()
                 {1,1,1,1,1,1,1,1,1,1},
                 {1,1,1,1,1,1,1,1,1,1},
                 {1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1},
                 {1,1,1,1,1,1,1,1,1,1}
             }
 
@@ -50,8 +52,8 @@ function love.update(dt)
     --Update Mouse Pos
     mousePos.x, mousePos.y = love.mouse.getPosition()
 
-    --update paddle position on X-Axis
-    pad.x = mousePos.x
+    
+    CheckPaddleCollideWalls()
 
     --Behavior of ball if STICKY or NOT
     if ball.stick == true  then
@@ -62,6 +64,8 @@ function love.update(dt)
         ball.y = ball.y + ball.vy
     end
 
+    CheckBallCollideWall()
+    
 end
 
 function love.draw()
@@ -76,6 +80,8 @@ function love.draw()
     PrintDebug()
 
     DrawLevel(level_1)
+
+    
     
 end
 
@@ -109,12 +115,39 @@ function love.keypressed(key)
     end  
 end
 
+function CheckBallCollideWall()
+    --Wall Right
+    if ball.x >= largeur - (ball.width/2) then ball.vx = 0 - ball.vx end
+    --Wall Upside
+    if ball.y <= 0 + (ball.width/2) then ball.vy = 0 - ball.vy end
+    --Wall Left
+    if ball.x <= 0 + (ball.width/2) then ball.vx = 0 - ball.vx end
+    --Wall Bottom ! (Game Over ?)
+    if ball.y >= hauteur - (ball.width/2) then ball.vy = 0 - ball.vy end
+end
+
+function CheckBallCollidePad()
+
+end
+
+--Manage paddle movements & collisions on walls
+function CheckPaddleCollideWalls()
+    --update paddle position on X-Axis
+    pad.x = mousePos.x
+
+    --Wall Right
+    if pad.x >= largeur - (pad.width) then 
+        pad.x = largeur - pad.width 
+
+    end
+end
+
 function PrintDebug() 
     --Paddle informations
-    love.graphics.print("Pad.x: "..pad.x, 850, 10, 0, 1.5, 1.5)
-    love.graphics.print("Pad.y: "..pad.y, 850, 30, 0, 1.5, 1.5)
-    love.graphics.print("Mouse.x: "..mousePos.x, 850, 50, 0, 1.5, 1.5)
-    love.graphics.print("Mouse.y: "..mousePos.y, 850, 70, 0, 1.5, 1.5)
+    love.graphics.print("Pad.x: "..pad.x, 650, 470, 0, 1.5, 1.5)
+    love.graphics.print("Pad.y: "..pad.y, 650, 490, 0, 1.5, 1.5)
+    --love.graphics.print("Mouse.x: "..mousePos.x, 850, 50, 0, 1.5, 1.5)
+    --love.graphics.print("Mouse.y: "..mousePos.y, 850, 70, 0, 1.5, 1.5)
 
-    love.graphics.print("#level_1[1] : "..#level_1[1], 850, 90, 0, 1.5, 1.5)
+    --love.graphics.print("#level_1[1] : "..#level_1[1], 850, 90, 0, 1.5, 1.5)
 end
