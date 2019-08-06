@@ -22,8 +22,9 @@ function love.load()
         ball.x = pad.x + (pad.width / 2)
         ball.y = pad.y - (ball.width / 2)
         ball.stick = true
-        ball.vx = 2
-        ball.vy = -2
+        ball.speed = 180
+        ball.vx = ball.speed
+        ball.vy = -ball.speed
 
     mousePos = {}
         mousePos.x, mousePos.y = 0  
@@ -49,10 +50,13 @@ end
 
 function love.update(dt)
 
+    
+
     --Update Mouse Pos
     mousePos.x, mousePos.y = love.mouse.getPosition()
 
-    
+    --update paddle position on X-Axis
+    pad.x = mousePos.x
     CheckPaddleCollideWalls()
 
     --Behavior of ball if STICKY or NOT
@@ -60,8 +64,10 @@ function love.update(dt)
         ball.x = pad.x + (pad.width / 2)
         ball.y = pad.y - (ball.width / 2)
     elseif ball.stick == false then
-        ball.x = ball.x + ball.vx
-        ball.y = ball.y + ball.vy
+        
+
+        ball.x = ball.x + (ball.vx * dt)
+        ball.y = ball.y + (ball.vy * dt)
     end
 
     CheckBallCollideWall()
@@ -130,10 +136,9 @@ function CheckBallCollidePad()
 
 end
 
---Manage paddle movements & collisions on walls
+--Manage collisions on walls
 function CheckPaddleCollideWalls()
-    --update paddle position on X-Axis
-    pad.x = mousePos.x
+    
 
     --Wall Right
     if pad.x >= largeur - (pad.width) then 
@@ -144,8 +149,8 @@ end
 
 function PrintDebug() 
     --Paddle informations
-    love.graphics.print("Pad.x: "..pad.x, 650, 470, 0, 1.5, 1.5)
-    love.graphics.print("Pad.y: "..pad.y, 650, 490, 0, 1.5, 1.5)
+    love.graphics.print("ball.vx: "..ball.vx, 650, 470, 0, 1.5, 1.5)
+    love.graphics.print("ball.vy: "..ball.vy, 650, 490, 0, 1.5, 1.5)
     --love.graphics.print("Mouse.x: "..mousePos.x, 850, 50, 0, 1.5, 1.5)
     --love.graphics.print("Mouse.y: "..mousePos.y, 850, 70, 0, 1.5, 1.5)
 
